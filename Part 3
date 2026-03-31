@@ -1,0 +1,106 @@
+"""
+---------------------------------------------------
+SPRINT 3: GRITTY GOALS BY HB
+---------------------------------------------------
+[ ] Uses GLOBAL CONSTANTS
+[ ] Uses keyword arguments in main()
+[ ] Clean function structure
+---------------------------------------------------
+"""
+
+# -----------------------------
+# GLOBAL CONSTANTS
+# -----------------------------
+
+DEFAULT_REDUCTION_RATE = 20
+MONTHS_IN_YEAR = 12
+
+# -----------------------------
+# FUNCTION DEFINITIONS
+# -----------------------------
+
+def get_user_data():
+    """Collect user financial information."""
+    return {
+        "name": "Humza",
+        "income": 4500,
+        "fixed": 2000,
+        "variable": 1000,
+        "reduction": DEFAULT_REDUCTION_RATE
+    }
+
+
+def calculate_expenses(fixed, variable):
+    """Calculate total expenses."""
+    return fixed + variable
+
+
+def calculate_savings(income, expenses, reduction_percent=DEFAULT_REDUCTION_RATE):
+    """Calculate current and projected savings."""
+    current_savings = income - expenses
+    reduced_expenses = expenses * (reduction_percent / 100)
+    new_savings = current_savings + reduced_expenses
+    yearly_projection = new_savings * MONTHS_IN_YEAR
+    return new_savings, yearly_projection
+
+
+def generate_report(name, income, expenses, savings, projected):
+    """Create formatted report."""
+    return f"""
+-------------------------------------
+GRITTY GOALS SAVINGS REPORT
+-------------------------------------
+User: {name}
+Monthly Income: ${income}
+Total Expenses: ${expenses}
+New Monthly Savings: ${savings}
+Projected Yearly Savings: ${projected}
+-------------------------------------
+"""
+
+
+def save_to_file(data):
+    """Save data to file."""
+    with open("budget_report.txt", "w") as file:
+        file.write(data)
+
+
+# -----------------------------
+# MAIN CONTROLLER
+# -----------------------------
+
+def main():
+    """Program controller"""
+
+    user_data = get_user_data()
+
+    total_expenses = calculate_expenses(
+        fixed=user_data["fixed"],
+        variable=user_data["variable"]
+    )
+
+    savings, projected = calculate_savings(
+        income=user_data["income"],
+        expenses=total_expenses,
+        reduction_percent=user_data["reduction"]
+    )
+
+    report = generate_report(
+        name=user_data["name"],
+        income=user_data["income"],
+        expenses=total_expenses,
+        savings=savings,
+        projected=projected
+    )
+
+    save_to_file(data=report)
+
+    print(report)
+
+
+# -----------------------------
+# PROGRAM START
+# -----------------------------
+
+if __name__ == "__main__":
+    main()
